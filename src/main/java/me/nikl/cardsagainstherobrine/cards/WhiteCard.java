@@ -1,9 +1,12 @@
 package me.nikl.cardsagainstherobrine.cards;
 
+import org.bukkit.inventory.ItemStack;
+
 /**
  * @author Niklas Eicker
  */
 public class WhiteCard {
+    private static ItemStack whiteCardIcon;
     private String text;
 
     public WhiteCard(String text) {
@@ -12,5 +15,13 @@ public class WhiteCard {
 
     public String getText() {
         return text;
+    }
+
+    public static void setWhiteCardIcon(ItemStack whiteCardIcon) {
+        WhiteCard.whiteCardIcon = whiteCardIcon;
+    }
+
+    public static ItemStack getWhiteCardIcon() {
+        return WhiteCard.whiteCardIcon.clone();
     }
 }

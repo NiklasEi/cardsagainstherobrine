@@ -1,4 +1,4 @@
-package me.nikl.cardsagainstherobrine;
+package me.nikl.cardsagainstherobrine.game;
 
 import me.nikl.cardsagainstherobrine.cards.BlackCard;
 import me.nikl.cardsagainstherobrine.cards.WhiteCard;
@@ -11,9 +11,9 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Niklas Eicker
@@ -21,8 +21,8 @@ import java.util.Set;
  * This class loads game data from a JSON file and acts as a provider of the loaded data.
  */
 public class GameData {
-    private Set<BlackCard> blackCards;
-    private Set<WhiteCard> whiteCards;
+    private List<BlackCard> blackCards;
+    private List<WhiteCard> whiteCards;
     private String name;
     private String iconString;
 
@@ -33,8 +33,8 @@ public class GameData {
 
     private void loadGameDataFromJSON(File file) {
         JSONParser parser = new JSONParser();
-        blackCards = new HashSet<>();
-        whiteCards = new HashSet<>();
+        blackCards = new ArrayList<>();
+        whiteCards = new ArrayList<>();
         try {
             Object object = parser.parse(new FileReader(file));
             JSONObject jsonObject = (JSONObject) object;
@@ -62,18 +62,20 @@ public class GameData {
                     this.whiteCards.add(new WhiteCard((String) whiteCards.get(((Long) whiteCardsIndices.get(i)).intValue())));
                 }
             }
-            this.blackCards = Collections.unmodifiableSet(this.blackCards);
-            this.whiteCards = Collections.unmodifiableSet(this.whiteCards);
+            Collections.shuffle(this.blackCards);
+            Collections.shuffle(this.whiteCards);
+            this.blackCards = Collections.unmodifiableList(this.blackCards);
+            this.whiteCards = Collections.unmodifiableList(this.whiteCards);
         } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Set<BlackCard> getBlackCards() {
+    public List<BlackCard> getBlackCards() {
         return this.blackCards;
     }
 
-    public Set<WhiteCard> getWhiteCards() {
+    public List<WhiteCard> getWhiteCards() {
         return this.whiteCards;
     }
 
