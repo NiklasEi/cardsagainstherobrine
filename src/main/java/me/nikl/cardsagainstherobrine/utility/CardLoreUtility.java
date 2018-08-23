@@ -1,6 +1,7 @@
 package me.nikl.cardsagainstherobrine.utility;
 
 import me.nikl.cardsagainstherobrine.cards.BlackCard;
+import me.nikl.cardsagainstherobrine.cards.Card;
 import me.nikl.cardsagainstherobrine.cards.WhiteCard;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Niklas Eicker
  */
 public class CardLoreUtility {
-    private static long charsPerLine = 40;
+    private static long charsPerLine = 30;
 
     public static List<String> createAnswerLore(BlackCard blackCard, WhiteCard... whiteCards) {
         if (blackCard.getPick() != whiteCards.length) throw new IllegalArgumentException("Unexpected number of white cards!");
@@ -46,10 +47,14 @@ public class CardLoreUtility {
                 lineBuilder.append(word);
                 continue;
             }
-            lineBuilder.append(" " + word);
-            charCount += word.toCharArray().length;
+            lineBuilder.append(charCount==0?"":" " + word);
+            charCount += word.toCharArray().length + 1;
         }
         toReturn.add(lineBuilder.toString());
         return toReturn;
+    }
+
+    public static List<String> createCardLore(Card card) {
+        return formatLore(card.getText());
     }
 }

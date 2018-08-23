@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author Niklas Eicker
  */
-public class BlackCard {
+public class BlackCard implements Card {
     private static ItemStack blackCardIcon;
     private int pick;
     private String text;
@@ -15,6 +15,7 @@ public class BlackCard {
         this.pick = pick;
     }
 
+    @Override
     public String getText() {
         return text;
     }

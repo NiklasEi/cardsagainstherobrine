@@ -4,3 +4,9 @@ main: me.nikl.cardsagainstherobrine.CardsAgainstHerobrine
 version: 1.0.0
 website: nikl.me
 api-version: 1.13
+
+commands:
+  cardsagainstherobrine:
+    description: test command
+    usage: /test
+    aliases: [cah]

@@ -27,12 +27,17 @@
                     <artifactSet>
                         <includes>
                             <include>me.nikl:inventories</include>
+                            <include>me.nikl.nmsutilities:*</include>
                         </includes>
                     </artifactSet>
                     <relocations>
                         <relocation>
                             <pattern>me.nikl.inventories</pattern>
                             <shadedPattern>me.nikl.cardsagainstherobrine.common.inventories</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.nikl.nmsutilities</pattern>
+                            <shadedPattern>me.nikl.cardsagainstherobrine.common.nmsutilities</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -71,6 +76,22 @@
             <groupId>me.nikl</groupId>
             <artifactId>inventories</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>me.nikl.nmsutilities</groupId>
+            <artifactId>nmsutilities</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+        <!-- other stuff -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
         </dependency>
     </dependencies>
 

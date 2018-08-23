@@ -2,21 +2,18 @@ package me.nikl.cardsagainstherobrine.buttons;
 
 import me.nikl.cardsagainstherobrine.game.CahGame;
 import me.nikl.inventories.button.EasyButton;
-import me.nikl.inventories.hooks.ChangeableLore;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.List;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author Niklas Eicker
  */
-public class CahGameButton extends EasyButton implements ChangeableLore {
+public class CahGameButton extends EasyButton {
     private CahGame game;
 
-    public CahGameButton(CahGame game) {
-        super(game.getIcon());
+    public CahGameButton(CahGame game, ItemStack icon) {
+        super(icon);
         this.game = game;
     }
 
@@ -27,10 +24,12 @@ public class CahGameButton extends EasyButton implements ChangeableLore {
     }
 
     @Override
-    public void updateLore(List<String> list) {
-        ItemMeta meta = icon.getItemMeta();
-        meta.setLore(list);
-        icon.setItemMeta(meta);
-        getParent().addButton(getSlot(), this);
+    public void onPreRender() {
+        // nothing to do
+    }
+
+    @Override
+    public void onAfterRender() {
+        // nothing to do
     }
 }

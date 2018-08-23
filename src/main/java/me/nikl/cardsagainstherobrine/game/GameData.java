@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Niklas Eicker
@@ -28,7 +29,6 @@ public class GameData {
 
     public GameData(File file) {
         loadGameDataFromJSON(file);
-        Bukkit.getLogger().info("Got " + blackCards.size() + " black cards and " + whiteCards.size() + " white cards.");
     }
 
     private void loadGameDataFromJSON(File file) {
@@ -47,23 +47,19 @@ public class GameData {
                 JSONObject setObject = (JSONObject) jsonObject.get(orderName);
                 name = (String) setObject.get("name");
                 iconString = (String) setObject.get("icon");
-                Bukkit.getLogger().info("Loading set: " + name);
-                Bukkit.getLogger().info("Icon: " + iconString);
                 JSONArray blackCardsIndices = (JSONArray) setObject.get("black");
                 JSONArray whiteCardsIndices = (JSONArray) setObject.get("white");
 
                 JSONObject cardObject;
                 for (int j = 0; j < blackCardsIndices.size(); j++) {
-                    cardObject = (JSONObject) blackCards.get(((Long) blackCardsIndices.get(i)).intValue());
+                    cardObject = (JSONObject) blackCards.get(((Long) blackCardsIndices.get(j)).intValue());
                     this.blackCards.add(new BlackCard((String) cardObject.get("text"), ((Long) cardObject.get("pick")).intValue()));
                 }
 
                 for (int j = 0; j < whiteCardsIndices.size(); j++) {
-                    this.whiteCards.add(new WhiteCard((String) whiteCards.get(((Long) whiteCardsIndices.get(i)).intValue())));
+                    this.whiteCards.add(new WhiteCard((String) whiteCards.get(((Long) whiteCardsIndices.get(j)).intValue())));
                 }
             }
-            Collections.shuffle(this.blackCards);
-            Collections.shuffle(this.whiteCards);
             this.blackCards = Collections.unmodifiableList(this.blackCards);
             this.whiteCards = Collections.unmodifiableList(this.whiteCards);
         } catch (ParseException | IOException e) {
@@ -81,5 +77,21 @@ public class GameData {
 
     public String getName() {
         return this.name;
+    }
+
+    public List<BlackCard> getNRandomBlackCards(int n) {
+        if (n > blackCards.size()) throw new IllegalArgumentException("n is bigger then the number of black cards");
+        List<BlackCard> toReturn = new ArrayList<>(blackCards);
+        Random random = new Random(System.currentTimeMillis());
+        BlackCard temp;
+        int size = toReturn.size();
+        int randSlot;
+        for (int i = 0; i < n; i++) {
+            temp = toReturn.get(i);
+            randSlot = i + random.nextInt(size - i);
+            toReturn.set(i, toReturn.get(randSlot));
+            toReturn.set(randSlot, temp);
+        }
+        return toReturn.subList(0, n);
     }
 }
