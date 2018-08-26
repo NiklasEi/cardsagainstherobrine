@@ -2,6 +2,7 @@ package me.nikl.cardsagainstherobrine.game;
 
 import me.nikl.cardsagainstherobrine.buttons.BlackCardButton;
 import me.nikl.cardsagainstherobrine.buttons.CahGameButton;
+import me.nikl.cardsagainstherobrine.buttons.VoteButton;
 import me.nikl.cardsagainstherobrine.buttons.WhiteCardButton;
 import me.nikl.cardsagainstherobrine.cards.BlackCard;
 import me.nikl.cardsagainstherobrine.cards.WhiteCard;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +33,7 @@ public class CahGame {
     private Map<UUID, List<WhiteCard>> playerCards = new HashMap<>();
     private Map<UUID, Inventory> playerInventories = new HashMap<>();
     private Map<UUID, List<WhiteCardButton>> selectedPlayerCards = new HashMap<>();
+    private Map<UUID, VoteButton> currentVotes = new HashMap<>();
     private GameData gameData;
     private GameRules gameRules;
     private int maxRounds = 10;
@@ -76,8 +79,6 @@ public class CahGame {
         playerInventories.get(whoClicked.getUniqueId()).open(whoClicked);
         players.add(whoClicked);
         if (players.size() == gameRules.getNumberOfPlayers()) {
-            this.gameState = GameState.ROUND_SELECT;
-            stampForNextPhase = System.currentTimeMillis() + gameRules.getSecondsToPick() * 1000;
             nextRound();
         }
         updateGameButton();
@@ -96,6 +97,9 @@ public class CahGame {
 
     private void nextRound() {
         currentRound ++;
+        stampForNextPhase = System.currentTimeMillis() + gameRules.getSecondsToPick() * 1000;
+        this.gameState = GameState.ROUND_SELECT;
+        currentVotes.clear();
         fillInventoriesForRound();
     }
 
@@ -140,6 +144,27 @@ public class CahGame {
     }
 
     private void startVoting() {
+        gameState = GameState.ROUND_VOTE;
+        this.stampForNextPhase = System.currentTimeMillis() + gameRules.getSecondsToVote() * 1000;
+        fillInventoriesForVoting();
+    }
+
+    private void fillInventoriesForVoting() {
+        for (Player player : players) {
+            fillInventoryForVoting(player);
+        }
+    }
+
+    private void fillInventoryForVoting(Player player) {
+        Inventory inventory = playerInventories.get(player.getUniqueId());
+        inventory.clear();
+        renderWhiteCards(inventory, player);
+    }
+
+    private void renderWhiteCards(Inventory inventory, Player player) {
+        for (int i = 0; i < players.size(); i++) {
+            inventory.addButton(9 + 2*i, new VoteButton(this, player));
+        }
     }
 
     public void leftGame(Player player) {
@@ -159,5 +184,21 @@ public class CahGame {
     private void updateGameContext() {
         gameContext.put("%players%", String.valueOf(players.size()));
         gameContext.put("%status%", gameState.name());
+    }
+
+    public BlackCard getCurrentBlackCard() {
+        return blackCards.get(currentRound);
+    }
+
+    public Collection<WhiteCardButton> getChosenWhiteCards(Player player) {
+        return selectedPlayerCards.get(player.getUniqueId());
+    }
+
+    public void voteClick(VoteButton voteButton, UUID clicker) {
+        if (currentVotes.containsKey(clicker)) {
+            currentVotes.get(clicker).unselect();
+        }
+        voteButton.select();
+        currentVotes.put(clicker, voteButton);
     }
 }
