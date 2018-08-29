@@ -11,17 +11,11 @@ import java.util.Map;
  * @author Niklas Eicker
  */
 public class Messenger {
-    private static CardsAgainstHerobrine plugin;
     private static Language language;
     private static String prefix; // get once since used in every message...
 
-    public static void setPluginInstance(CardsAgainstHerobrine plugin){
-        Messenger.plugin = plugin;
-        Messenger.language = plugin.getLanguage();
-        reload();
-    }
-
-    public static void reload() {
+    public static void reload(Language language) {
+        Messenger.language = language;
         Messenger.prefix = language.getString(MessageKey.PREFIX.getPath());
     }
 

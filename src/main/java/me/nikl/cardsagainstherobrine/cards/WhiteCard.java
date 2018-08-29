@@ -10,7 +10,7 @@ public class WhiteCard implements Card {
     private String text;
 
     public WhiteCard(String text) {
-        this.text = text;
+        this.text = text.replace("&trade;", "™");
     }
 
     @Override

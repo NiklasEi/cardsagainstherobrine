@@ -13,7 +13,7 @@
 #   to use the default messages just write 'default' (this option uses a file from inside the jar!)
 #   you cannot customise messages when using 'default', but your messages will always be up to date
 # If you want custom messages please write your own file or use one of the already written 'lang_xx.yml' files
-langFile: 'default'
+languageFile: 'default'
 
 
 # Economy related settings.

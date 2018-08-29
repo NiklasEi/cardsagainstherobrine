@@ -11,3 +11,10 @@ game:
     - "%players%/%maxPlayers% player"
     - ""
     - "Status: %status%"
+  cardLores:
+    blackCards:
+      text: "&1"
+      placeholder: "&l"
+      answer: "&a&l"
+    whiteCards:
+      text: "&c"

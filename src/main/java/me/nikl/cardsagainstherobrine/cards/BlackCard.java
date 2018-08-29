@@ -11,7 +11,7 @@ public class BlackCard implements Card {
     private String text;
 
     public BlackCard(String text, int pick) {
-        this.text = text;
+        this.text = text.replace("&trade;", "™");
         this.pick = pick;
     }
 

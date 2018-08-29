@@ -1,10 +1,10 @@
 package me.nikl.cardsagainstherobrine.language;
 
-import me.nikl.cardsagainstherobrine.CardsAgainstHerobrine;
 import me.nikl.cardsagainstherobrine.utility.FileUtility;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,21 +27,19 @@ import java.util.Map;
 public abstract class Language {
     private static final String FOLDER = "language";
 
-    private CardsAgainstHerobrine plugin;
-    private FileConfiguration config;
+    protected Plugin plugin;
+    protected FileConfiguration config;
     private String fileName;
     private File languageFile;
     private FileConfiguration defaultLanguage;
     private FileConfiguration language;
 
-    private Map<String, String> messages = new HashMap<>();
-    private Map<String, List<String>> lists = new HashMap<>();
+    protected Map<String, String> messages = new HashMap<>();
+    protected Map<String, List<String>> lists = new HashMap<>();
 
-    public Language(CardsAgainstHerobrine plugin){
+    public Language(Plugin plugin){
         this.plugin = plugin;
-        this.config = plugin.getConfig();
-        FileUtility.copyDefaultLanguageFiles();
-        getLangFile();
+        reload();
     }
 
     /**
@@ -50,6 +48,7 @@ public abstract class Language {
     public void reload(){
         messages.clear();
         lists.clear();
+        FileUtility.copyDefaultLanguageFiles();
         this.config = plugin.getConfig();
         getLangFile();
     }
@@ -60,7 +59,7 @@ public abstract class Language {
      *
      * The required path is 'langFile'.
      */
-    private void getLangFile() {
+    protected void getLangFile() {
         // load default language
         loadDefaultLanguage();
         if(!checkFileName()) return;
@@ -114,7 +113,7 @@ public abstract class Language {
         return true;
     }
 
-    private void loadDefaultLanguage() {
+    protected void loadDefaultLanguage() {
         try {
             String defaultLangName = "language/lang_en.yml";
             defaultLanguage = YamlConfiguration.loadConfiguration(new InputStreamReader(plugin.getResource(defaultLangName), "UTF-8"));
@@ -184,7 +183,7 @@ public abstract class Language {
      */
     public List<String> getStringList(String path) {
         List<String> toReturn = lists.get(path);
-        if(toReturn != null) return toReturn;
+        if(toReturn != null) return new ArrayList<>(toReturn);
         // load from default file if path is not valid
         if(!language.isList(path)){
             toReturn = defaultLanguage.getStringList(path);
@@ -194,7 +193,7 @@ public abstract class Language {
                 }
             }
             lists.put(path, toReturn);
-            return toReturn;
+            return new ArrayList<>(toReturn);
         }
 
         // load from language file
@@ -205,7 +204,7 @@ public abstract class Language {
             }
         }
         lists.put(path, toReturn);
-        return toReturn;
+        return new ArrayList<>(toReturn);
     }
 
     /**

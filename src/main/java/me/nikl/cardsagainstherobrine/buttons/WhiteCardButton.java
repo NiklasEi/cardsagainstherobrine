@@ -8,6 +8,9 @@ import me.nikl.inventories.button.EasyButton;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.List;
 
 /**
  * @author Niklas Eicker
@@ -25,12 +28,19 @@ public class WhiteCardButton extends EasyButton {
 
     @Override
     public void onPreRender() {
-        // nothing to do
+        List<String> lore = CardLoreUtility.createCardLore(whiteCard);
+        ItemMeta meta = icon.getItemMeta();
+        Bukkit.getLogger().info("set name to: " + lore.get(0));
+        meta.setDisplayName(lore.get(0));
+        lore.remove(0);
+        if (!lore.isEmpty())
+            meta.setLore(lore);
+        icon.setItemMeta(meta);
     }
 
     @Override
     public void onAfterRender() {
-        updateLore(CardLoreUtility.createCardLore(whiteCard));
+        // nothing to do
     }
 
     @Override

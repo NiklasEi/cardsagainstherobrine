@@ -1,5 +1,6 @@
 package me.nikl.cardsagainstherobrine.game;
 
+import me.nikl.cardsagainstherobrine.CardsAgainstHerobrine;
 import me.nikl.cardsagainstherobrine.buttons.BlackCardButton;
 import me.nikl.cardsagainstherobrine.buttons.CahGameButton;
 import me.nikl.cardsagainstherobrine.buttons.VoteButton;
@@ -81,6 +82,7 @@ public class CahGame {
         if (players.size() == gameRules.getNumberOfPlayers()) {
             nextRound();
         }
+        CardsAgainstHerobrine.debug("players: " + players.size());
         updateGameButton();
     }
 
@@ -101,6 +103,7 @@ public class CahGame {
         this.gameState = GameState.ROUND_SELECT;
         currentVotes.clear();
         fillInventoriesForRound();
+        for (Player player : players) player.setCooldown(Material.CLOCK, gameRules.getSecondsToPick()*20);
     }
 
     private void fillInventoriesForRound() {
@@ -113,7 +116,7 @@ public class CahGame {
         Inventory inventory = playerInventories.get(uniqueId);
         inventory.addButton(4, new BlackCardButton(blackCards.get(currentRound), this));
         for (int i = 0; i < whiteCardsPerTurn; i++)
-            inventory.addButton(18 + i, new WhiteCardButton(whiteCards.get(i), this));
+            inventory.addButton(18 + i, new WhiteCardButton(playerCards.get(uniqueId).get(i), this));
     }
 
     public boolean selectWhiteCard(WhiteCardButton whiteCardButton, Player whoClicked) {
@@ -147,6 +150,7 @@ public class CahGame {
         gameState = GameState.ROUND_VOTE;
         this.stampForNextPhase = System.currentTimeMillis() + gameRules.getSecondsToVote() * 1000;
         fillInventoriesForVoting();
+        for (Player player : players) player.setCooldown(Material.CLOCK, gameRules.getSecondsToVote()*20);
     }
 
     private void fillInventoriesForVoting() {
@@ -173,15 +177,15 @@ public class CahGame {
 
     private void updateGameButton() {
         updateGameContext();
-        gameButton.updateLore(Messenger.createList(MessageKey.GAMEBUTTON_LORE, gameContext));
+        gameButton.updateLore(Messenger.createList(MessageKey.GAME_BUTTON_LORE, gameContext));
     }
 
     private void loadContext() {
         gameContext.put("%maxPlayers%", String.valueOf(gameRules.getNumberOfPlayers()));
-        updateGameContext();
     }
 
     private void updateGameContext() {
+        CardsAgainstHerobrine.debug("should say: " + players.size());
         gameContext.put("%players%", String.valueOf(players.size()));
         gameContext.put("%status%", gameState.name());
     }

@@ -11,6 +11,7 @@ public class CahLanguage extends Language {
 
     public CahLanguage(CardsAgainstHerobrine plugin) {
         super(plugin);
+        Messenger.reload(this);
     }
 
     public String getString(MessageKey key) {

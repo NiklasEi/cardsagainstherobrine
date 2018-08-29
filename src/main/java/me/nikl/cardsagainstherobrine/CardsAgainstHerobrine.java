@@ -46,10 +46,8 @@ public class CardsAgainstHerobrine extends JavaPlugin {
         }
         if (this.language == null) {
             this.language = new CahLanguage(this);
-            Messenger.setPluginInstance(this);
         } else {
             this.language.reload();
-            Messenger.reload();
         }
         // ToDo: load icons
         WhiteCard.setWhiteCardIcon(new ItemStack(Material.PAPER));
