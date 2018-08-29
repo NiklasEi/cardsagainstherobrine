@@ -1,0 +1,13 @@
+prefix: "&r[&6CAH&r]"
+name: "&6CardsAgainstHerobrine&r"
+
+game:
+  inventorytitle:
+    pre: "Waiting for %playersLeft% more players"
+    choose: "Choose %whiteCards% cards"
+    vote: "Vote for the best pick"
+  button:
+    lore:
+    - "%players%/%maxPlayers% player"
+    - ""
+    - "Status: %status%"
