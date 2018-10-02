@@ -1,6 +1,5 @@
 package me.nikl.cardsagainstherobrine.language;
 
-import me.nikl.cardsagainstherobrine.CardsAgainstHerobrine;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nullable;

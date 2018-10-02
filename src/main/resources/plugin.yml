@@ -10,3 +10,12 @@ commands:
     description: test command
     usage: /test
     aliases: [cah]
+
+permissions:
+  cardsagainstherobrine.*:
+    description: Gives all permissions
+    children:
+      cardsagainstherobrine.command.use: true
+  cardsagainstherobrine.command.use:
+    description: Allows usage of the wikipedia command
+    default: true

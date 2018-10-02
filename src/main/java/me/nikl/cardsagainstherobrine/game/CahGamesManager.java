@@ -2,16 +2,8 @@ package me.nikl.cardsagainstherobrine.game;
 
 import me.nikl.cardsagainstherobrine.CardsAgainstHerobrine;
 import me.nikl.cardsagainstherobrine.inventories.MainGui;
-import me.nikl.cardsagainstherobrine.language.CahLanguage;
 import me.nikl.inventories.inventory.AbstractInventory;
 import me.nikl.inventories.inventory.EasyInventory;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Niklas Eicker
@@ -21,11 +13,14 @@ public class CahGamesManager {
     private CardsAgainstHerobrine cardsAgainstHerobrine;
     private GameProvider gameProvider;
     private MainGui mainGui;
+    private GameTimer timer;
 
     public CahGamesManager(CardsAgainstHerobrine cardsAgainstHerobrine) {
         this.cardsAgainstHerobrine = cardsAgainstHerobrine;
         prepareInventories();
         gameProvider = new GameProvider(cardsAgainstHerobrine);
+        this.timer = new GameTimer();
+        timer.runTaskTimer(cardsAgainstHerobrine, 2, 2);
     }
 
     private void prepareInventories() {
@@ -38,7 +33,13 @@ public class CahGamesManager {
     }
 
     public CahGame newGame() {
-        return new CahGame(new GameRules(gameProvider.getGameData("Base Set")), this);
+        CahGame game = new CahGame(new GameRules(gameProvider.getGameData("Base Set")), this);
+        timer.registerGame(game);
+        return game;
+    }
+
+    public void onGameEnd(CahGame game) {
+        timer.removeGame(game);
     }
 
     public CardsAgainstHerobrine getPlugin() {

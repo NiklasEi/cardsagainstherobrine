@@ -3,6 +3,7 @@ package me.nikl.cardsagainstherobrine.game;
 import me.nikl.cardsagainstherobrine.CardsAgainstHerobrine;
 import me.nikl.cardsagainstherobrine.buttons.BlackCardButton;
 import me.nikl.cardsagainstherobrine.buttons.CahGameButton;
+import me.nikl.cardsagainstherobrine.buttons.EmptyVoteButton;
 import me.nikl.cardsagainstherobrine.buttons.VoteButton;
 import me.nikl.cardsagainstherobrine.buttons.WhiteCardButton;
 import me.nikl.cardsagainstherobrine.cards.BlackCard;
@@ -140,6 +141,7 @@ public class CahGame {
 
     private void nextPhase() {
         if (gameState == GameState.ROUND_VOTE) {
+            currentVotes.clear();
             nextRound();
             return;
         }
@@ -167,7 +169,12 @@ public class CahGame {
 
     private void renderWhiteCards(Inventory inventory, Player player) {
         for (int i = 0; i < players.size(); i++) {
-            inventory.addButton(9 + 2*i, new VoteButton(this, player));
+            Player whiteCardOwner = players.get(i);
+            if (whiteCardOwner.getUniqueId().equals(player.getUniqueId())) {
+                inventory.addButton(9 + 2*i, new EmptyVoteButton(this, whiteCardOwner));
+                continue;
+            }
+            inventory.addButton(9 + 2*i, new VoteButton(this, whiteCardOwner));
         }
     }
 
